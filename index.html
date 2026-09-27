@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>FakeNitro — Revenge Plugin</title>
+<style>
+    :root {
+        --blurple: #5865F2;
+        --blurple-dark: #4752C4;
+        --bg-darkest: #1e1f22;
+        --bg-dark: #2b2d31;
+        --bg-card: #313338;
+        --text-primary: #f2f3f5;
+        --text-muted: #b5bac1;
+        --green: #23a55a;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+        margin: 0;
+        padding: 0;
+        background: var(--bg-darkest);
+        color: var(--text-primary);
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        -webkit-font-smoothing: antialiased;
+    }
+
+    .hero {
+        position: relative;
+        overflow: hidden;
+        background: radial-gradient(circle at 20% 20%, #4752C4 0%, #1e1f22 55%);
+        padding: 56px 24px 72px;
+        text-align: center;
+    }
+
+    .hero::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background:
+            radial-gradient(2px 2px at 20% 30%, rgba(255,255,255,0.35), transparent),
+            radial-gradient(2px 2px at 70% 15%, rgba(255,255,255,0.25), transparent),
+            radial-gradient(1.5px 1.5px at 85% 60%, rgba(255,255,255,0.3), transparent),
+            radial-gradient(1.5px 1.5px at 40% 80%, rgba(255,255,255,0.2), transparent),
+            radial-gradient(2px 2px at 10% 65%, rgba(255,255,255,0.3), transparent);
+        pointer-events: none;
+    }
+
+    .logo-badge {
+        position: relative;
+        z-index: 1;
+        width: 84px;
+        height: 84px;
+        margin: 0 auto 20px;
+        border-radius: 24px;
+        background: var(--blurple);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 12px 30px rgba(88, 101, 242, 0.45);
+    }
+
+    .logo-badge svg { width: 44px; height: 44px; }
+
+    h1 {
+        position: relative;
+        z-index: 1;
+        font-size: clamp(2rem, 8vw, 2.75rem);
+        line-height: 1.1;
+        margin: 0 0 12px;
+        font-weight: 800;
+        letter-spacing: -0.02em;
+    }
+
+    .hero p.tagline {
+        position: relative;
+        z-index: 1;
+        color: var(--text-muted);
+        font-size: 1.05rem;
+        max-width: 480px;
+        margin: 0 auto 32px;
+        line-height: 1.5;
+    }
+
+    .btn-row {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        max-width: 420px;
+        margin: 0 auto;
+    }
+
+    .btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 14px 20px;
+        border-radius: 999px;
+        font-weight: 700;
+        font-size: 1rem;
+        text-decoration: none;
+        cursor: pointer;
+        border: none;
+        transition: transform 0.15s ease, filter 0.15s ease;
+    }
+
+    .btn:active { transform: scale(0.97); }
+
+    .btn-primary {
+        background: #ffffff;
+        color: var(--bg-darkest);
+    }
+    .btn-primary:hover { filter: brightness(0.95); }
+
+    .btn-secondary {
+        background: rgba(255,255,255,0.08);
+        color: var(--text-primary);
+        border: 1px solid rgba(255,255,255,0.15);
+    }
+    .btn-secondary:hover { background: rgba(255,255,255,0.14); }
+
+    section {
+        padding: 48px 20px;
+        max-width: 640px;
+        margin: 0 auto;
+    }
+
+    .section-title {
+        font-size: 1.5rem;
+        font-weight: 800;
+        margin: 0 0 8px;
+        letter-spacing: -0.01em;
+    }
+
+    .section-sub {
+        color: var(--text-muted);
+        margin: 0 0 24px;
+        line-height: 1.5;
+    }
+
+    .card {
+        background: var(--bg-card);
+        border: 1px solid rgba(255,255,255,0.06);
+        border-radius: 16px;
+        padding: 18px 20px;
+        margin-bottom: 12px;
+        display: flex;
+        align-items: flex-start;
+        gap: 14px;
+    }
+
+    .card .icon {
+        flex-shrink: 0;
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+        background: rgba(88, 101, 242, 0.18);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--blurple);
+    }
+
+    .card .icon svg { width: 20px; height: 20px; }
+
+    .card h3 {
+        margin: 0 0 4px;
+        font-size: 1rem;
+        font-weight: 700;
+    }
+
+    .card p {
+        margin: 0;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        line-height: 1.45;
+    }
+
+    .install-box {
+        background: var(--bg-dark);
+        border: 1px solid rgba(255,255,255,0.08);
+        border-radius: 16px;
+        padding: 20px;
+    }
+
+    .install-box ol {
+        margin: 0;
+        padding-left: 20px;
+        color: var(--text-muted);
+        line-height: 1.8;
+        font-size: 0.95rem;
+    }
+
+    .install-box code {
+        background: rgba(0,0,0,0.35);
+        color: #fff;
+        padding: 2px 8px;
+        border-radius: 6px;
+        font-size: 0.85rem;
+        word-break: break-all;
+    }
+
+    .link-copy {
+        margin-top: 16px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background: var(--bg-darkest);
+        border: 1px solid rgba(255,255,255,0.1);
+        border-radius: 10px;
+        padding: 12px 14px;
+    }
+
+    .link-copy input {
+        flex: 1;
+        background: transparent;
+        border: none;
+        color: var(--text-primary);
+        font-size: 0.85rem;
+        outline: none;
+        min-width: 0;
+    }
+
+    .copy-btn {
+        flex-shrink: 0;
+        background: var(--blurple);
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        padding: 8px 14px;
+        font-size: 0.85rem;
+        font-weight: 700;
+        cursor: pointer;
+    }
+
+    .copy-btn:active { background: var(--blurple-dark); }
+
+    .badge-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        justify-content: center;
+        margin-top: 20px;
+        position: relative;
+        z-index: 1;
+    }
+
+    .badge {
+        background: rgba(255,255,255,0.1);
+        color: var(--text-primary);
+        font-size: 0.75rem;
+        font-weight: 600;
+        padding: 6px 12px;
+        border-radius: 999px;
+        border: 1px solid rgba(255,255,255,0.12);
+    }
+
+    footer {
+        text-align: center;
+        padding: 32px 20px 48px;
+        color: var(--text-muted);
+        font-size: 0.85rem;
+    }
+
+    footer a { color: var(--blurple); text-decoration: none; }
+
+    .disclaimer {
+        max-width: 640px;
+        margin: 0 auto 8px;
+        padding: 14px 20px;
+        background: rgba(88, 101, 242, 0.08);
+        border: 1px solid rgba(88, 101, 242, 0.25);
+        border-radius: 12px;
+        color: var(--text-muted);
+        font-size: 0.82rem;
+        line-height: 1.5;
+    }
+</style>
+</head>
+<body>
+
+<div class="hero">
+    <div class="logo-badge">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2L3 7v10l9 5 9-5V7l-9-5z" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"/>
+            <path d="M8 12l3 3 5-6" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+    </div>
+    <h1>FakeNitro</h1>
+    <p class="tagline">
+        A plugin for Revenge / Bunny that brings profile themes, profile effects &amp; frames,
+        and cosmetic client-side Nitro unlocks to Discord Android.
+    </p>
+
+    <div class="btn-row">
+        <a class="btn btn-primary" href="./FakeNitro/" id="installBtn">
+            Install Plugin
+        </a>
+        <a class="btn btn-secondary" href="https://github.com/kattt4996-lgtm/FakeNitro" target="_blank" rel="noopener">
+            View Source on GitHub
+        </a>
+    </div>
+
+    <div class="badge-row">
+        <span class="badge">Revenge</span>
+        <span class="badge">Bunny</span>
+        <span class="badge">Discord Android</span>
+        <span class="badge">Client-side only</span>
+    </div>
+</div>
+
+<section>
+    <h2 class="section-title">What it does</h2>
+    <p class="section-sub">Everything runs locally on your own client — nothing is sent to Discord's servers or changes what other users see unless they run the same plugin.</p>
+
+    <div class="card">
+        <div class="icon">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/><path d="M12 3a9 9 0 010 18" stroke="currentColor" stroke-width="1.8"/></svg>
+        </div>
+        <div>
+            <h3>Profile Themes &amp; Effects</h3>
+            <p>Show custom profile theme colors, profile effects, and profile frames by hiding data in your About Me using invisible zero-width characters.</p>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="icon">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div>
+            <h3>Unlock Emojis &amp; Stickers</h3>
+            <p>Optionally treat filtered, disabled, or premium-locked emojis and stickers as usable on your own client.</p>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="icon">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="4" y="4" width="16" height="16" rx="4" stroke="currentColor" stroke-width="1.8"/><path d="M8 12h8M12 8v8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        </div>
+        <div>
+            <h3>Premium Type Override</h3>
+            <p>Locally display the premium badge/tier of your choice — None, Nitro Classic, Nitro, or Nitro Basic — purely cosmetic.</p>
+        </div>
+    </div>
+</section>
+
+<section>
+    <h2 class="section-title">How to install</h2>
+    <p class="section-sub">You need Revenge or Bunny already set up on Discord Android.</p>
+
+    <div class="install-box">
+        <ol>
+            <li>Open Discord (with Revenge/Bunny installed)</li>
+            <li>Go to <strong>Settings → Plugins</strong></li>
+            <li>Tap <strong>Install plugin</strong> / the + icon</li>
+            <li>Paste the link below</li>
+            <li>Confirm and enable the plugin</li>
+        </ol>
+
+        <div class="link-copy">
+            <input id="pluginUrl" type="text" readonly value="https://kattt4996-lgtm.github.io/FakeNitro/FakeNitro/" />
+            <button class="copy-btn" onclick="copyLink()">Copy</button>
+        </div>
+    </div>
+</section>
+
+<div class="disclaimer">
+    <strong>Note:</strong> If you landed here directly from a plugin link (like <code>/FakeNitro/</code>) and saw a 404 or raw code, that's expected —
+    that URL is meant to be pasted into Revenge/Bunny's plugin installer, not opened as a webpage.
+</div>
+
+<footer>
+    Not affiliated with or endorsed by Discord Inc.<br />
+    <a href="https://github.com/kattt4996-lgtm/FakeNitro" target="_blank" rel="noopener">Source on GitHub</a>
+</footer>
+
+<script>
+    function copyLink() {
+        const input = document.getElementById('pluginUrl');
+        input.select();
+        input.setSelectionRange(0, 99999);
+        navigator.clipboard?.writeText(input.value).then(() => {
+            const btn = document.querySelector('.copy-btn');
+            const original = btn.textContent;
+            btn.textContent = 'Copied!';
+            setTimeout(() => { btn.textContent = original; }, 1500);
+        }).catch(() => {
+            document.execCommand('copy');
+        });
+    }
+</script>
+
+</body>
+</html>
