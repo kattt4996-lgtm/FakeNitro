@@ -1,0 +1,41 @@
+name: Build and deploy
+on: workflow_dispatch
+
+jobs:
+    build-and-deploy:
+        runs-on: ubuntu-latest
+        permissions:
+            contents: write
+
+        steps:
+          - name: Checkout repository
+            uses: actions/checkout@v4
+
+          - name: Install pnpm
+            uses: pnpm/action-setup@v4
+
+          - name: Install Node.js 20
+            uses: actions/setup-node@v4
+            with:
+                node-version: ^20.9.0
+                cache: pnpm
+
+          - name: Install dependencies
+            run: pnpm install --frozen-lockfile
+
+          - name: Build plugin(s)
+            run: pnpm build
+
+          - name: Setup landing & 404 pages
+            run: |
+                cp static/index.html dist/index.html
+                cp static/index.html dist/404.html
+                cp README.md dist/README.md
+                touch dist/.nojekyll
+
+          - name: Deploy to GitHub Pages
+            uses: peaceiris/actions-gh-pages@v4
+            with:
+                github_token: ${{ secrets.GITHUB_TOKEN }}
+                publish_dir: ./dist
+                
